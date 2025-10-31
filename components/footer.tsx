@@ -19,14 +19,14 @@ export default function Footer() {
               Manivel Mughilan
             </h3>
             <p className="text-foreground/70 text-sm leading-relaxed">
-              B.Tech CS Student | AI & Web Developer | Aspiring Technologist
+              B.Tech CS Student | Synthesis Engineer | AI & Systems Innovator
             </p>
           </div>
 
           <div>
             <h4 className="font-semibold mb-4 text-foreground">Quick Links</h4>
             <ul className="space-y-2 text-sm">
-              {["Home", "About", "Skills", "Projects", "Contact"].map((link) => (
+              {["Home", "About", "Skills", "Projects", "Knowledge", "Contact"].map((link) => (
                 <li key={link}>
                   <a
                     href={`#${link.toLowerCase()}`}
@@ -40,10 +40,10 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-foreground">Latest</h4>
+            <h4 className="font-semibold mb-4 text-foreground">Latest Work</h4>
             <p className="text-foreground/70 text-sm leading-relaxed">
-              Building AI-powered web applications and exploring the intersection of machine learning and web
-              development.
+              Synthesizing insights across AI, systems engineering, and innovation architecture. Exploring the
+              intersection of machine learning, scalable systems, and human-centered design.
             </p>
           </div>
         </div>

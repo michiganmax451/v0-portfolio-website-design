@@ -7,6 +7,7 @@ import About from "@/components/about"
 import Skills from "@/components/skills"
 import Services from "@/components/services"
 import Projects from "@/components/projects"
+import KnowledgeGarden from "@/components/knowledge-garden"
 import Contact from "@/components/contact"
 import Footer from "@/components/footer"
 
@@ -55,6 +56,13 @@ export default function Home() {
       unlocked: false,
     },
     {
+      id: "knowledge-reader",
+      name: "Thought Curator",
+      description: "Explored the Knowledge Garden",
+      icon: "🌱",
+      unlocked: false,
+    },
+    {
       id: "full-journey",
       name: "Complete Navigator",
       description: "Scrolled through entire portfolio",
@@ -88,24 +96,24 @@ export default function Home() {
     const handleScroll = () => {
       setScrollY(window.scrollY)
 
-      // Achievement: Full journey
       if (window.scrollY > document.documentElement.scrollHeight - window.innerHeight - 100) {
         unlockAchievement("full-journey")
       }
 
-      // Achievement: About reader
       if (window.scrollY > 800) {
         unlockAchievement("about-reader")
       }
 
-      // Achievement: Skill master
       if (window.scrollY > 1600) {
         unlockAchievement("skill-master")
       }
 
-      // Achievement: Project explorer
       if (window.scrollY > 2400) {
         unlockAchievement("project-explorer")
+      }
+
+      if (window.scrollY > 3200) {
+        unlockAchievement("knowledge-reader")
       }
     }
 
@@ -133,7 +141,7 @@ export default function Home() {
     const startTime = Date.now()
     const speedInterval = setTimeout(() => {
       const elapsed = (Date.now() - startTime) / 1000 / 60
-      if (elapsed < 2 && scrollY > 2000) {
+      if (elapsed < 2 && scrollY > 3000) {
         unlockAchievement("speed-reader")
       }
     }, 120000)
@@ -189,7 +197,6 @@ export default function Home() {
 
   const activateEasterEgg = () => {
     setEasterEggActive(true)
-    // Add fun effects
     document.body.style.filter = "hue-rotate(45deg)"
     setTimeout(() => {
       document.body.style.filter = "none"
@@ -272,6 +279,7 @@ export default function Home() {
       <Skills />
       <Services />
       <Projects />
+      <KnowledgeGarden />
       <Contact />
       <Footer />
 
@@ -280,7 +288,7 @@ export default function Home() {
           <div className="text-center animate-bounce">
             <p className="text-6xl mb-4">🎮</p>
             <p className="text-2xl font-bold text-primary">KONAMI CODE ACTIVATED!</p>
-            <p className="text-sm text-foreground/60 mt-2">Secret mode unlocked for Renaissance Technologist</p>
+            <p className="text-sm text-foreground/60 mt-2">Secret mode unlocked for Synthesis Engineer</p>
           </div>
         </div>
       )}

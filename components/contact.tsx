@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, Linkedin, Github, Phone, MapPin, Zap, CheckCircle2, ArrowRight } from "lucide-react"
+import { Mail, Linkedin, Github, Phone, MapPin, CheckCircle2, ArrowRight } from "lucide-react"
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -17,6 +17,7 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [collaborationScore, setCollaborationScore] = useState(0)
   const [expandedCard, setExpandedCard] = useState(false)
+  const [handsakePhase, setHandshakePhase] = useState(0)
 
   const contactInfo = [
     { icon: Mail, label: "Email", value: "manimeets09@gmail.com", href: "mailto:manimeets09@gmail.com" },
@@ -38,6 +39,14 @@ export default function Contact() {
     { id: "research", label: "Research", color: "#ffbe0b" },
   ]
 
+  const compatibilityDimensions = [
+    { name: "Technical Alignment", current: 0 },
+    { name: "Vision Synergy", current: 0 },
+    { name: "Communication Clarity", current: 0 },
+    { name: "Value Alignment", current: 0 },
+    { name: "Innovation Potential", current: 0 },
+  ]
+
   useEffect(() => {
     const calculateResonance = () => {
       const nameScore = formData.name.length * 2
@@ -46,6 +55,10 @@ export default function Contact() {
       const typeScore = formData.projectType ? 20 : 0
       const total = Math.min(nameScore + emailScore + messageScore + typeScore, 100)
       setResonance(total)
+
+      if (total > 50) {
+        setHandshakePhase(Math.min(Math.floor(total / 25), 4))
+      }
     }
     calculateResonance()
   }, [formData])
@@ -69,7 +82,29 @@ export default function Contact() {
     e.preventDefault()
     setSubmitted(true)
     setFormData({ name: "", email: "", message: "", projectType: "" })
+    setHandshakePhase(0)
     setTimeout(() => setSubmitted(false), 3000)
+  }
+
+  const renderHandshakePhase = () => {
+    const phases = ["Initiating", "Handshaking", "Validating", "Synthesizing", "Ready"]
+    return (
+      <div className="space-y-2">
+        {phases.map((phase, idx) => (
+          <div key={phase} className="flex items-center gap-3">
+            <div
+              className={`w-2 h-2 rounded-full transition-all ${
+                idx < handsakePhase ? "bg-primary scale-150" : "bg-primary/30"
+              }`}
+              style={{
+                boxShadow: idx < handsakePhase ? "0 0 8px #00d4ff" : "none",
+              }}
+            />
+            <span className="text-xs font-mono text-foreground/60">{phase}</span>
+          </div>
+        ))}
+      </div>
+    )
   }
 
   return (
@@ -85,8 +120,10 @@ export default function Contact() {
 
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 animate-fade-in-up">
-          <h2 className="section-heading text-5xl md:text-6xl font-bold mb-4 text-balance">Connection Matrix</h2>
-          <p className="text-lg text-foreground/60 font-light">Neural Handshake Protocol</p>
+          <h2 className="section-heading text-5xl md:text-6xl font-bold mb-4 text-balance">Connection Protocol</h2>
+          <p className="text-lg text-foreground/60 font-light">
+            Neural handshake and collaboration synthesis framework
+          </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
@@ -96,14 +133,13 @@ export default function Contact() {
               <CardHeader>
                 <CardTitle className="text-2xl text-primary">Resonance Form</CardTitle>
                 <p className="text-foreground/60 text-sm mt-2">
-                  This form visually responds to the quality of your input. Watch the resonance meter react in
-                  real-time.
+                  This form initiates the neural handshake protocol. Watch the connection establish in real-time.
                 </p>
               </CardHeader>
               <CardContent>
                 {!submitted ? (
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Resonance Meter */}
+                    {/* Resonance Meter with Handshake Visualization */}
                     <div className="p-4 rounded-lg bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/20">
                       <div className="flex justify-between items-center mb-3">
                         <span className="text-sm font-mono text-foreground/70">RESONANCE LEVEL</span>
@@ -111,7 +147,7 @@ export default function Contact() {
                           {Math.round(resonance)}%
                         </span>
                       </div>
-                      <div className="w-full h-3 bg-background/50 rounded-full overflow-hidden">
+                      <div className="w-full h-3 bg-background/50 rounded-full overflow-hidden mb-4">
                         <div
                           className="h-full rounded-full transition-all duration-500 animate-shimmer"
                           style={{
@@ -122,6 +158,7 @@ export default function Contact() {
                           }}
                         />
                       </div>
+                      {handsakePhase > 0 && renderHandshakePhase()}
                     </div>
 
                     {/* Name Field */}
@@ -205,7 +242,7 @@ export default function Contact() {
                     </div>
                     <h3 className="text-2xl font-bold text-primary mb-2">Connection Established!</h3>
                     <p className="text-foreground/70">
-                      Thank you for reaching out. I'll get back to you as soon as possible.
+                      Neural handshake complete. I'll get back to you as soon as possible.
                     </p>
                   </div>
                 )}
@@ -215,14 +252,14 @@ export default function Contact() {
 
           {/* Collaboration Probability & Business Card */}
           <div className="space-y-6">
-            {/* Collaboration Probability Calculator */}
             <div className="glass-card p-6 rounded-xl border-primary/30 bg-gradient-to-br from-primary/10 to-accent/10">
-              <h3 className="font-bold text-primary mb-4 flex items-center gap-2">
-                <Zap size={20} />
-                Collaboration Probability
-              </h3>
-
-              <div className="space-y-4">
+              <CardHeader>
+                <CardTitle className="text-xl text-primary">Compatibility Matrix</CardTitle>
+                <p className="text-foreground/60 text-sm mt-2">
+                  This matrix evaluates your compatibility across multiple dimensions.
+                </p>
+              </CardHeader>
+              <CardContent>
                 <div className="text-center">
                   <div
                     className="text-5xl font-bold mb-2"
@@ -238,18 +275,33 @@ export default function Contact() {
                   <p className="text-xs text-foreground/60 font-mono">MATCH POTENTIAL</p>
                 </div>
 
-                <div className="p-3 rounded-lg bg-background/30 border border-primary/20 text-center">
-                  <p className="text-sm text-foreground/70">
+                <div className="space-y-2 text-xs">
+                  {compatibilityDimensions.map((dim) => (
+                    <div key={dim.name} className="flex items-center gap-2">
+                      <span className="w-20 text-foreground/60 truncate">{dim.name}</span>
+                      <div className="flex-1 h-1.5 bg-background/30 rounded-full overflow-hidden">
+                        <div
+                          className="h-full transition-all duration-500"
+                          style={{
+                            width: `${Math.random() * 80 + 20}%`,
+                            background: "linear-gradient(90deg, #00d4ff, #00ff88)",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="p-3 rounded-lg bg-background/30 border border-primary/20 text-center text-xs">
+                  <p className="text-foreground/70">
                     {collaborationScore > 80
-                      ? "Excellent potential for collaboration!"
+                      ? "Exceptional alignment detected!"
                       : collaborationScore > 60
-                        ? "Good match for potential projects"
-                        : collaborationScore > 40
-                          ? "Open to exploring possibilities"
-                          : "Keep filling the form to improve match"}
+                        ? "Strong collaboration potential"
+                        : "Open to exploring synergies"}
                   </p>
                 </div>
-              </div>
+              </CardContent>
             </div>
 
             {/* Digital Business Card */}
@@ -257,56 +309,59 @@ export default function Contact() {
               className="glass-card p-6 rounded-xl border-primary/30 cursor-pointer hover:border-primary/60 transition-all group"
               onClick={() => setExpandedCard(!expandedCard)}
             >
-              <h3 className="font-bold text-primary mb-4">Digital Business Card</h3>
-
-              {!expandedCard ? (
-                <div className="space-y-3 text-sm">
-                  <p className="font-semibold text-foreground">Manivel Mughilan T S</p>
-                  <p className="text-foreground/60">Multi-disciplinary Innovator</p>
-                  <p className="text-foreground/50 text-xs">AI • Web • Systems</p>
-                  <p className="text-xs text-primary font-mono mt-4">Click to expand...</p>
-                </div>
-              ) : (
-                <div className="space-y-4 animate-fade-in-up">
-                  <div>
-                    <p className="text-xs text-foreground/50 font-mono mb-1">NAME</p>
-                    <p className="font-bold text-foreground">Manivel Mughilan T S</p>
+              <CardHeader>
+                <CardTitle className="text-xl text-primary">Digital Business Card</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {!expandedCard ? (
+                  <div className="space-y-3 text-sm">
+                    <p className="font-semibold text-foreground">Manivel Mughilan T S</p>
+                    <p className="text-foreground/60">Synthesis Engineer</p>
+                    <p className="text-foreground/50 text-xs">AI Systems • Full-Stack • Innovation</p>
+                    <p className="text-xs text-primary font-mono mt-4">Click to expand...</p>
                   </div>
-                  <div>
-                    <p className="text-xs text-foreground/50 font-mono mb-1">TITLE</p>
-                    <p className="font-semibold text-primary">Renaissance Technologist</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-foreground/50 font-mono mb-1">EXPERTISE</p>
-                    <div className="flex flex-wrap gap-2">
-                      {["AI/ML", "Web Dev", "Systems"].map((skill) => (
-                        <span key={skill} className="px-2 py-1 text-xs rounded bg-primary/20 text-primary">
-                          {skill}
-                        </span>
-                      ))}
+                ) : (
+                  <div className="space-y-4 animate-fade-in-up">
+                    <div>
+                      <p className="text-xs text-foreground/50 font-mono mb-1">NAME</p>
+                      <p className="font-bold text-foreground">Manivel Mughilan T S</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground/50 font-mono mb-1">TITLE</p>
+                      <p className="font-semibold text-primary">Synthesis Engineer</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground/50 font-mono mb-1">EXPERTISE</p>
+                      <div className="flex flex-wrap gap-2">
+                        {["AI/ML", "Systems", "Architecture"].map((skill) => (
+                          <span key={skill} className="px-2 py-1 text-xs rounded bg-primary/20 text-primary">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground/50 font-mono mb-2">CONNECT</p>
+                      <div className="flex gap-2">
+                        {socialLinks.map((link) => {
+                          const Icon = link.icon
+                          return (
+                            <a
+                              key={link.label}
+                              href={link.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-8 h-8 rounded flex items-center justify-center bg-primary/20 hover:bg-primary/40 transition-all"
+                            >
+                              <Icon size={14} className="text-primary" />
+                            </a>
+                          )
+                        })}
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-foreground/50 font-mono mb-2">CONNECT</p>
-                    <div className="flex gap-2">
-                      {socialLinks.map((link) => {
-                        const Icon = link.icon
-                        return (
-                          <a
-                            key={link.label}
-                            href={link.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded flex items-center justify-center bg-primary/20 hover:bg-primary/40 transition-all"
-                          >
-                            <Icon size={14} className="text-primary" />
-                          </a>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </div>
-              )}
+                )}
+              </CardContent>
             </div>
 
             {/* Contact Info Cards */}
@@ -335,10 +390,10 @@ export default function Contact() {
 
         {/* Connection Philosophy */}
         <div className="glass-card p-8 rounded-xl border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5 text-center">
-          <h3 className="text-2xl font-bold text-foreground mb-4">Let's Build Something Great Together</h3>
+          <h3 className="text-2xl font-bold text-foreground mb-4">Let's Synthesize Innovation</h3>
           <p className="text-foreground/70 max-w-2xl mx-auto">
-            Whether you're interested in collaboration, have an exciting project, or just want to exchange ideas—I'm
-            always open to meaningful connections. Let's explore the intersection of technology and innovation.
+            Whether you're exploring AI applications, building scalable systems, or seeking a synthesis engineer to
+            bridge technical domains—I'm open to meaningful collaborations that push the boundaries of what's possible.
           </p>
         </div>
       </div>

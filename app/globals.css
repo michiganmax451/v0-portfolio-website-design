@@ -331,7 +331,7 @@
     transform: translateY(-4px);
   }
 
-  /* Quantum state button with morphing */
+  /* Quantum state button with morphing - fixed gradient syntax */
   .quantum-button {
     @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 relative overflow-hidden;
     background: linear-gradient(135deg, #00d4ff, #00ff88);

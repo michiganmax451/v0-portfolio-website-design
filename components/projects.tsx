@@ -24,6 +24,8 @@ export default function Projects() {
   const [selectedCategory, setSelectedCategory] = useState<"ai" | "web" | "data" | null>(null)
   const [hoveredProject, setHoveredProject] = useState<string | null>(null)
   const [formations, setFormations] = useState<{ [key: string]: number }>({})
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [multiverseView, setMultiverseView] = useState<"constellation" | "timeline" | "synergy">("constellation")
 
   const projects: Project[] = [
     {
@@ -112,6 +114,35 @@ export default function Projects() {
     },
   ]
 
+  const projectMetadata: { [key: string]: { dimensions: string[]; synergies: string[]; quantum: number } } = {
+    "ai-content": {
+      dimensions: ["Intelligence", "Creativity", "Language"],
+      synergies: ["NLP", "Generation"],
+      quantum: 0.87,
+    },
+    "chat-app": { dimensions: ["Realtime", "Security", "Scale"], synergies: ["Infrastructure", "UX"], quantum: 0.82 },
+    "ml-dashboard": {
+      dimensions: ["Analytics", "Visualization", "Performance"],
+      synergies: ["Data Science", "Frontend"],
+      quantum: 0.85,
+    },
+    "cyber-system": {
+      dimensions: ["Autonomy", "Physics", "Intelligence"],
+      synergies: ["IoT", "Control"],
+      quantum: 0.91,
+    },
+    "web-framework": {
+      dimensions: ["Performance", "DX", "Innovation"],
+      synergies: ["Tools", "Architecture"],
+      quantum: 0.79,
+    },
+    "data-viz": {
+      dimensions: ["Rendering", "Interaction", "Scale"],
+      synergies: ["3D Graphics", "Data"],
+      quantum: 0.88,
+    },
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       setFormations((prev) => {
@@ -157,118 +188,245 @@ export default function Projects() {
 
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 animate-fade-in-up">
-          <h2 className="section-heading text-5xl md:text-6xl font-bold mb-4 text-balance">Project Nebula</h2>
-          <p className="text-lg text-foreground/60 font-light">Ideas in Formation - Constellation View</p>
-        </div>
-
-        {/* Constellation View Visualization */}
-        <div className="relative h-96 md:h-[500px] mb-16 glass-card p-8 rounded-xl border-primary/20 flex items-center justify-center group overflow-hidden">
-          <svg viewBox="0 0 800 600" className="w-full h-full max-w-4xl">
-            <defs>
-              <linearGradient id="constellationGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#00d4ff" />
-                <stop offset="50%" stopColor="#00ff88" />
-                <stop offset="100%" stopColor="#7b2cbf" />
-              </linearGradient>
-            </defs>
-
-            {/* Connecting lines between projects */}
-            {filteredProjects.map((project1, idx1) => {
-              const rad1 = (project1.angle * Math.PI) / 180
-              const x1 = 400 + 150 * Math.cos(rad1)
-              const y1 = 300 + 150 * Math.sin(rad1)
-
-              return filteredProjects.map((project2, idx2) => {
-                if (idx1 >= idx2) return null
-                const rad2 = (project2.angle * Math.PI) / 180
-                const x2 = 400 + 150 * Math.cos(rad2)
-                const y2 = 300 + 150 * Math.sin(rad2)
-
-                return (
-                  <line
-                    key={`${project1.id}-${project2.id}`}
-                    x1={x1}
-                    y1={y1}
-                    x2={x2}
-                    y2={y2}
-                    stroke="url(#constellationGrad)"
-                    strokeWidth="1"
-                    opacity="0.1"
-                  />
-                )
-              })
-            })}
-
-            {/* Project nodes */}
-            {filteredProjects.map((project) => {
-              const rad = (project.angle * Math.PI) / 180
-              const x = 400 + 150 * Math.cos(rad)
-              const y = 300 + 150 * Math.sin(rad)
-              const progress = formations[project.id] || project.formationProgress
-              const categoryColor =
-                project.category === "ai" ? "#00d4ff" : project.category === "web" ? "#00ff88" : "#7b2cbf"
-
-              return (
-                <g
-                  key={project.id}
-                  className="cursor-pointer"
-                  onMouseEnter={() => setHoveredProject(project.id)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                >
-                  {/* Outer ring - formation indicator */}
-                  <circle
-                    cx={x}
-                    cy={y}
-                    r="35"
-                    fill="none"
-                    stroke={categoryColor}
-                    strokeWidth="2"
-                    opacity={hoveredProject === project.id ? 0.8 : 0.3}
-                    style={{ transition: "opacity 0.3s" }}
-                  />
-
-                  {/* Formation progress arc */}
-                  <circle
-                    cx={x}
-                    cy={y}
-                    r="35"
-                    fill="none"
-                    stroke={categoryColor}
-                    strokeWidth="3"
-                    strokeDasharray={`${(progress / 100) * 220} 220`}
-                    opacity="0.8"
-                    style={{ transition: "all 0.3s" }}
-                  />
-
-                  {/* Project node */}
-                  <circle
-                    cx={x}
-                    cy={y}
-                    r={hoveredProject === project.id ? 25 : 20}
-                    fill={categoryColor}
-                    opacity={hoveredProject === project.id ? 0.4 : 0.2}
-                    style={{
-                      transition: "all 0.3s",
-                      filter: hoveredProject === project.id ? `drop-shadow(0 0 10px ${categoryColor})` : "none",
-                    }}
-                  />
-
-                  {/* Status indicator */}
-                  <circle cx={x} cy={y} r="8" fill={categoryColor} opacity="0.8" />
-
-                  {/* Label */}
-                  <text x={x} y={y + 50} textAnchor="middle" fill="#cbd5e0" fontSize="11" fontWeight="500">
-                    {project.status === "protostar" ? "⭐" : "🌙"} {project.title.split(" ")[0]}
-                  </text>
-                </g>
-              )
-            })}
-          </svg>
-
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-            <p className="text-sm text-foreground/60 text-center">Hover to view project formation progress</p>
+          <h2 className="section-heading text-5xl md:text-6xl font-bold mb-4 text-balance">Project Multiverse</h2>
+          <p className="text-lg text-foreground/60 font-light">
+            Parallel dimensions of innovation - Ideas in formation across multiple domains
+          </p>
+          <div className="flex gap-2 mt-6">
+            {(["constellation", "timeline", "synergy"] as const).map((view) => (
+              <button
+                key={view}
+                onClick={() => setMultiverseView(view)}
+                className={`px-4 py-2 rounded-lg text-sm font-mono transition-all ${
+                  multiverseView === view
+                    ? "bg-primary/30 text-primary border border-primary/50"
+                    : "bg-background/50 text-foreground/70 border border-primary/20 hover:border-primary/50"
+                }`}
+              >
+                {view === "constellation" && "✦ Constellation"}
+                {view === "timeline" && "⏱ Timeline"}
+                {view === "synergy" && "🔗 Synergy"}
+              </button>
+            ))}
           </div>
         </div>
+
+        {multiverseView === "constellation" && (
+          <div className="relative h-96 md:h-[500px] mb-16 glass-card p-8 rounded-xl border-primary/20 flex items-center justify-center group overflow-hidden">
+            <svg viewBox="0 0 800 600" className="w-full h-full max-w-4xl">
+              <defs>
+                <linearGradient id="constellationGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#00d4ff" />
+                  <stop offset="50%" stopColor="#00ff88" />
+                  <stop offset="100%" stopColor="#7b2cbf" />
+                </linearGradient>
+              </defs>
+
+              {/* Connecting lines between projects */}
+              {filteredProjects.map((project1, idx1) => {
+                const rad1 = (project1.angle * Math.PI) / 180
+                const x1 = 400 + 150 * Math.cos(rad1)
+                const y1 = 300 + 150 * Math.sin(rad1)
+
+                return filteredProjects.map((project2, idx2) => {
+                  if (idx1 >= idx2) return null
+                  const rad2 = (project2.angle * Math.PI) / 180
+                  const x2 = 400 + 150 * Math.cos(rad2)
+                  const y2 = 300 + 150 * Math.sin(rad2)
+
+                  return (
+                    <line
+                      key={`${project1.id}-${project2.id}`}
+                      x1={x1}
+                      y1={y1}
+                      x2={x2}
+                      y2={y2}
+                      stroke="url(#constellationGrad)"
+                      strokeWidth="1"
+                      opacity="0.1"
+                    />
+                  )
+                })
+              })}
+
+              {/* Project nodes */}
+              {filteredProjects.map((project) => {
+                const rad = (project.angle * Math.PI) / 180
+                const x = 400 + 150 * Math.cos(rad)
+                const y = 300 + 150 * Math.sin(rad)
+                const progress = formations[project.id] || project.formationProgress
+                const categoryColor =
+                  project.category === "ai" ? "#00d4ff" : project.category === "web" ? "#00ff88" : "#7b2cbf"
+
+                return (
+                  <g
+                    key={project.id}
+                    className="cursor-pointer"
+                    onMouseEnter={() => {
+                      setHoveredProject(project.id)
+                      setSelectedProject(project)
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredProject(null)
+                      setSelectedProject(null)
+                    }}
+                  >
+                    {/* Outer ring - formation indicator */}
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r="35"
+                      fill="none"
+                      stroke={categoryColor}
+                      strokeWidth="2"
+                      opacity={hoveredProject === project.id ? 0.8 : 0.3}
+                      style={{ transition: "opacity 0.3s" }}
+                    />
+
+                    {/* Formation progress arc */}
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r="35"
+                      fill="none"
+                      stroke={categoryColor}
+                      strokeWidth="3"
+                      strokeDasharray={`${(progress / 100) * 220} 220`}
+                      opacity="0.8"
+                      style={{ transition: "all 0.3s" }}
+                    />
+
+                    {/* Project node */}
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r={hoveredProject === project.id ? 25 : 20}
+                      fill={categoryColor}
+                      opacity={hoveredProject === project.id ? 0.4 : 0.2}
+                      style={{
+                        transition: "all 0.3s",
+                        filter: hoveredProject === project.id ? `drop-shadow(0 0 10px ${categoryColor})` : "none",
+                      }}
+                    />
+
+                    {/* Status indicator */}
+                    <circle cx={x} cy={y} r="8" fill={categoryColor} opacity="0.8" />
+
+                    {/* Label */}
+                    <text x={x} y={y + 50} textAnchor="middle" fill="#cbd5e0" fontSize="11" fontWeight="500">
+                      {project.status === "protostar" ? "⭐" : "🌙"} {project.title.split(" ")[0]}
+                    </text>
+                  </g>
+                )
+              })}
+            </svg>
+            {selectedProject && (
+              <div className="absolute bottom-8 left-8 right-8 glass-card p-4 rounded-lg border-primary/30 max-w-sm">
+                <p className="text-sm font-mono text-primary mb-2">PROJECT DIMENSIONS</p>
+                <div className="flex flex-wrap gap-2">
+                  {projectMetadata[selectedProject.id]?.dimensions.map((dim) => (
+                    <span key={dim} className="px-2 py-1 text-xs rounded bg-primary/20 text-primary">
+                      {dim}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {multiverseView === "timeline" && (
+          <div className="mb-16">
+            <div className="space-y-6">
+              {filteredProjects.map((project, idx) => {
+                const metadata = projectMetadata[project.id]
+                const progress = formations[project.id] || project.formationProgress
+                const categoryColor =
+                  project.category === "ai" ? "#00d4ff" : project.category === "web" ? "#00ff88" : "#7b2cbf"
+                return (
+                  <div
+                    key={project.id}
+                    className="glass-card p-6 rounded-xl border-primary/20 hover:border-primary/50 transition-all"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-lg font-bold text-primary">{project.title}</h3>
+                        <p className="text-sm text-foreground/60 mt-1">{project.description}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-foreground/50 font-mono">Quantum State</p>
+                        <p className="text-xl font-bold" style={{ color: categoryColor }}>
+                          {(metadata?.quantum || 0).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="px-2 py-1 text-xs rounded bg-primary/20 text-primary">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="w-full h-2 bg-background/50 rounded-full overflow-hidden">
+                      <div
+                        className="h-full transition-all duration-700"
+                        style={{
+                          width: `${progress}%`,
+                          background: categoryColor,
+                          boxShadow: `0 0 8px ${categoryColor}`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {multiverseView === "synergy" && (
+          <div className="grid md:grid-cols-2 gap-6 mb-16">
+            {filteredProjects.map((project) => {
+              const metadata = projectMetadata[project.id]
+              const categoryColor =
+                project.category === "ai" ? "#00d4ff" : project.category === "web" ? "#00ff88" : "#7b2cbf"
+              return (
+                <div
+                  key={project.id}
+                  className="glass-card p-6 rounded-xl border-primary/20 hover:border-primary/50 transition-all"
+                >
+                  <h3 className="font-bold text-primary mb-3">{project.title}</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-xs text-foreground/50 font-mono mb-2">DIMENSIONAL THINKING</p>
+                      <div className="flex flex-wrap gap-2">
+                        {metadata?.dimensions.map((dim) => (
+                          <span
+                            key={dim}
+                            className="px-2 py-1 text-xs rounded"
+                            style={{ backgroundColor: `${categoryColor}22`, color: categoryColor }}
+                          >
+                            {dim}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground/50 font-mono mb-2">SKILL SYNERGIES</p>
+                      <div className="flex flex-wrap gap-2">
+                        {metadata?.synergies.map((syn) => (
+                          <span key={syn} className="px-2 py-1 text-xs rounded bg-accent/20 text-accent">
+                            {syn}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
 
         {/* Category Filter */}
         <div className="flex flex-wrap gap-3 mb-12 justify-center">
