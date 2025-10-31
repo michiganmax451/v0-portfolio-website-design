@@ -1,15 +1,15 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] })
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Manivel Mughilan - AI & Web Developer",
+  title: "Manivel Mughilan - Renaissance Technologist",
   description:
-    "Aspiring technologist exploring AI, ML, and web development. B.Tech Computer Science student at VIT Chennai.",
+    "Multi-disciplinary innovator at the intersection of AI, web technologies, and cyber-physical systems. Curiosity-driven exploration in technology.",
   generator: "v0.app",
 }
 
@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`font-sans antialiased`}>{children}</body>
+    <html lang="en" className="scroll-smooth dark">
+      <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
   )
 }
